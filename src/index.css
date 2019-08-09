@@ -39,6 +39,10 @@ input[type="submit"]{
   height: auto;
 }
 
+select{
+  padding: 0.1875rem;
+}
+
 .container img {
   margin-top: 9.375rem;
 }
