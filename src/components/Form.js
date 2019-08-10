@@ -1,8 +1,9 @@
 import React, { useState ,useEffect} from 'react';
 import axios from 'axios';
 import Cryptocoin from './Cryptocoin';
+import Error from './Error';
 
-const Form = () => {
+const Form = ({setCoin, setCryptocoin, }) => {
 
     const apiKey = '4c9860b15116c2ce86b0dd62f2a3ca47665024f086e6b34f0d00025072109224';
 
@@ -30,12 +31,31 @@ const Form = () => {
         }, []
     );
 
+    const handleSubmit = e => {
+        e.preventDefault();
+
+        //validate if both files are filled
+        if(tradingCoin === '' || tradingCrypto === '') {
+            setError(true);
+            return; 
+        }
+
+        //send data to main component
+        setError(false);
+        setCoin(tradingCoin);
+        setCryptocoin(tradingCrypto);
+    }
+
+    const errorComponent = error ? <Error message="Both fields are mandatory!" /> : null; 
+
     return (  
-        <form>
+        <form
+            onSubmit={handleSubmit}
+        >
+            {errorComponent}
             <div className="row">
                 <label>Pick your Coin</label>
                 <select 
-                    name="" id=""
                     className="u-full-width"
                     onChange={ e => setTradingCoin(e.target.value) }
                 >
@@ -50,7 +70,6 @@ const Form = () => {
             <div className="row">
                 <label>Pick your CryptoCoin</label>
                 <select 
-                    name="" id=""
                     className="u-full-width"
                     onChange={ e => setTradingCrypto(e.target.value) }
                 >   
@@ -64,6 +83,8 @@ const Form = () => {
 
                 </select>
             </div>
+
+            <input type="submit" className="button-primary u-full-width" value="Calculate" />
         </form>
     );
 }
