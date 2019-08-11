@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import image from './cryptocoins.png';
 import Form from './components/Form';
+import Spinner from './components/Spinner';
+
 import axios from 'axios';
 
 function App() {
@@ -11,18 +13,29 @@ function App() {
   //state
   const [ coin, setCoin ] = useState('');
   const [ cryptocoin, setCryptocoin ] = useState('');
+  const [ loading, setLoading ] = useState(false);
 
   useEffect(() => {
     const tradeCrypto = async () => {
+
+      //not in mounting time
+      if (coin === '' || cryptocoin === '') return;
+
       const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${cryptocoin}&tsyms=${coin}&api_key=${apiKey}`;
 
       const response = await axios.get(url);
       console.log(response);
+
+      setLoading(true);
+
     }
 
     tradeCrypto();
   
-  }, [cryptocoin, coin]);
+  }, [ cryptocoin, coin ]);
+
+  //show spinner or return
+  const conditionalComp = loading ? <Spinner /> : null;
 
   return (
     <div className="container">
@@ -38,6 +51,8 @@ function App() {
             setCryptocoin={setCryptocoin}
           />
         </div>
+
+        <Spinner />
       </div>
     </div>
   );
